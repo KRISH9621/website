@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curious Champ | AI & Mathematics Learning Platform</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="assets/theme.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+
+     /* --- THEME TOKENS (light default, dark via toggle) --- */
+        :root {
+            color-scheme: light;
+            --brand-accent: #0e7490;
+            --accent-warm: #b45309;
+            --bg: #ffffff;
+            --surface-color: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: rgba(15, 23, 42, 0.1);
+            --grid-line: rgba(15, 23, 42, 0.05);
+            --glow-color: rgba(14, 116, 144, 0.07);
+            --btn-primary-bg: #0f172a;
+            --btn-primary-text: #ffffff;
+            --on-accent: #ffffff;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --brand-accent: #00f0ff;
+            --accent-warm: #ffb700;
+            --bg: #020617;
+            --surface-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --grid-line: rgba(255, 255, 255, 0.03);
+            --glow-color: rgba(0, 240, 255, 0.05);
+            --btn-primary-bg: #ffffff;
+            --btn-primary-text: #000000;
+            --on-accent: #020617;
+        }
+
+     /* --- GOLDEN GLOW MASTER CARD --- */
+        .module-card.golden-glow {
+    border: 1px solid color-mix(in srgb, var(--accent-warm) 40%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent-warm) 10%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent-warm) 4%, transparent) 0%, var(--surface-color) 100%);
+    transition: all 0.3s ease;
+}
+
+.module-card.golden-glow:hover {
+    border-color: color-mix(in srgb, var(--accent-warm) 80%, transparent);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--accent-warm) 25%, transparent);
+    transform: translateY(-5px);
+}
+
+.golden-glow .tag strong {
+    color: var(--accent-warm);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.golden-glow h3 {
+    color: var(--accent-warm);
+}
+
+/* --- CHAPTER BUTTON GRID --- */
+.chapter-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-chapter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: color-mix(in srgb, var(--accent-warm) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-warm) 25%, transparent);
+    color: var(--accent-warm);
+    text-decoration: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.btn-chapter:hover {
+    background: var(--accent-warm);
+    color: var(--on-accent);
+    box-shadow: 0 0 15px color-mix(in srgb, var(--accent-warm) 40%, transparent);
+    border-color: var(--accent-warm);
+}
+
+.chapter-number {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    font-family: monospace;
+}
+
+.btn-chapter:hover .chapter-number {
+    opacity: 1; /* Makes the chapter number pop on hover */
+}
+
+        body, html {
+            margin: 0; padding: 0;
+            background-color: var(--bg); color: var(--text-main);
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- SUBTLE MESH BACKGROUND --- */
+        .grid-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -10;
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        .glow {
+            position: fixed; top: -20vh; left: 50vw; width: 80vw; height: 80vh;
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%);
+            transform: translateX(-50%); filter: blur(80px); z-index: -9;
+        }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 5vw; }
+        .section { padding: 100px 0; border-bottom: 1px solid var(--border-color); }
+
+        /* --- NAVIGATION --- */
+        nav { padding: 30px 5vw; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-main); letter-spacing: 2px; }
+        .logo span { color: var(--brand-accent); }
+        .nav-right { display: flex; align-items: center; gap: 30px; }
+        .nav-tag { font-size: 0.9rem; color: var(--text-muted); letter-spacing: 1px; }
+        .nav-about { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px; transition: 0.3s; }
+        .nav-about:hover { color: var(--brand-accent); }
+
+        /* --- HERO SECTION --- */
+        .hero { text-align: left; padding: 120px 0; max-width: 900px; }
+        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 5rem; font-weight: 700; margin: 0; line-height: 1.1; letter-spacing: -2px; }
+        .hero h22 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; font-weight: 500; margin: 0; line-height: 0.9; letter-spacing: -2px; }
+        .hero p { font-size: 1.3rem; color: var(--text-muted); margin-top: 30px; font-weight: 300; max-width: 700px; line-height: 1.8; }
+
+        /* --- PLATFORM PHILOSOPHY --- */
+        .philosophy { display: flex; gap: 50px; margin-top: 50px; }
+        .phil-card { flex: 1; background: var(--surface-color); padding: 40px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .phil-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; color: var(--brand-accent); margin-top: 0; }
+        .phil-card p { font-size: 1rem; color: var(--text-muted); margin-bottom: 0; }
+
+        /* --- MODULES GRID --- */
+        h2.section-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; color: var(--text-main); margin-bottom: 50px; }
+
+        /* Centered the grid since there are only 2 items now */
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+
+        .module-card {
+            background: var(--surface-color); border: 1px solid var(--border-color); padding: 40px;
+            border-radius: 8px; transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .module-card:hover { border-color: var(--brand-accent); transform: translateY(-5px); box-shadow: 0 10px 30px color-mix(in srgb, var(--brand-accent) 10%, transparent); }
+
+        .tag { display: inline-block; padding: 5px 12px; background: color-mix(in srgb, var(--brand-accent) 10%, transparent); color: var(--brand-accent); font-size: 0.75rem; font-weight: 600; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; align-self: flex-start; }
+
+        .module-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; margin: 0 0 15px 0; color: var(--text-main); }
+        .module-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.7; flex-grow: 1; margin-bottom: 30px; }
+
+        /* Dual Button Layout */
+        .button-group { display: flex; gap: 15px; margin-top: auto; }
+
+        .btn-read {
+            flex: 1; padding: 12px 10px; background: var(--btn-primary-bg); color: var(--btn-primary-text); font-weight: 600;
+            text-decoration: none; border-radius: 4px; transition: 0.3s; text-align: center; font-family: 'Space Grotesk'; font-size: 0.95rem;
+        }
+        .btn-read:hover { background: var(--brand-accent); color: var(--on-accent); }
+
+        .btn-outline {
+            background: transparent; border: 1px solid color-mix(in srgb, var(--text-main) 25%, transparent); color: var(--text-main);
+        }
+        .btn-outline:hover {
+            border-color: var(--brand-accent); background: color-mix(in srgb, var(--brand-accent) 10%, transparent); color: var(--text-main);
+        }
+
+        /* --- FOOTER --- */
+        footer { padding: 50px 5vw; text-align: center; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border-color); }
+        footer a { color: var(--brand-accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <div class="glow"></div>
+
+    <nav>
+        <div class="logo">Curious<span>Champ</span></div>
+        <div class="nav-right">
+            <span class="nav-tag">OPEN-SOURCE LEARNING PLATFORM</span>
+            <a href="Krishnanand.html" class="nav-about">About</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Advanced AI &amp; Math, <br>Taught from First Principles.</h1>
+            <p>CuriousChamp is a free, browser-based learning platform offering structured courses in machine learning, calculus, and 3D geometry. We break complex academic material into chapters, worked examples, and live, runnable simulations.</p>
+            <h22><span style="color: var(--accent-warm);"><strong>Hey learner!</strong></span></h22>
+        </div>
+
+        <div class="section" style="padding-top: 0;">
+            <div class="philosophy">
+                <div class="phil-card">
+                    <h3>Visualizing Calculus</h3>
+                    <p>Mathematical formulas on a whiteboard are abstract. Our courses turn <span style="color: var(--accent-warm);"><strong>complex calculus</strong></span> and <span style="color: var(--accent-warm);"><strong>linear algebra</strong></span> into tangible, interactive 3D simulations you can study at your own pace.</p>
+                </div>
+                <div class="phil-card">
+                    <h3><super>Deconstructing AI</super></h3>
+                    <p>Instead of treating neural networks like black boxes, our modules dissect the underlying mathematics of generative models, enabling students to understand the <span style="color: var(--accent-warm);"><strong>'why'</strong></span> behind the output.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Course Catalogue</h2>
+
+            <div class="module-grid">
+                <div class="module-card golden-glow">
+    <span class="tag"><strong>Master Curriculum</strong></span>
+    <h3>The Calculus Series</h3>
+    <p>This curriculum leads you through the foundational concepts of calculus, from the history of its development to its applications in modern machine learning .</p>
+
+    <div class="chapter-grid">
+        <a href="calculus/history_of_calculus.html" class="btn-chapter">
+            <span class="chapter-title">The History of Calculus</span>
+            <span class="chapter-number">CH 01</span>
+        </a>
+
+        <a href="calculus/derivatives.html" class="btn-chapter">
+            <span class="chapter-title">Derivatives &amp; Slopes</span>
+            <span class="chapter-number">CH 02</span>
+        </a>
+
+        <a href="calculus/integrals.html" class="btn-chapter">
+            <span class="chapter-title">Integrals &amp; Area Under Curves</span>
+            <span class="chapter-number">CH 03</span>
+        </a>
+
+        <a href="calculus/chain_rule.html" class="btn-chapter">
+            <span class="chapter-title">The Chain Rule</span>
+            <span class="chapter-number">CH 04</span>
+        </a>
+    </div>
+</div>
+                <div class="module-card">
+                    <span class="tag"><span style="color: var(--accent-warm);"><strong>Calculus &amp; Mesh Processing</strong></span></span>
+                    <h3>Laplacian Smoothing &amp; De-Noising</h3>
+                    <p>A deep dive into the mathematics of removing high-frequency noise from <span style="color: var(--accent-warm);"><strong>AI-generated meshes</strong></span>. Learn how continuous calculus (second-order derivatives) is discretized into simple arithmetic to create a functional smoothing engine.</p>
+
+                    <div class="button-group">
+                        <a href="laplacian.html" class="btn-read">Read Module</a>
+                        <a href="laplacian_media.html" class="btn-read btn-outline">Media &amp; Sims</a>
+                    </div>
+                </div>
+
+                <div class="module-card">
+                    <span class="tag"><span style="color: var(--accent-warm);"><strong>Linear Algebra &amp; Alignment</strong></span></span>
+                    <h3>Iterative Closest Point (ICP)</h3>
+                    <p>Understand the mathematics of spatial alignment. Discover how <span style="color: var(--accent-warm);"><strong> Singular Value Decomposition (SVD)</strong></span> and nearest-neighbor matching snap misaligned 3D point clouds together, and explore the fatal flaw of local minima.</p>
+
+                    <div class="button-group">
+                        <a href="icp.html" class="btn-read">Read Module</a>
+                        <a href="icp_media.html" class="btn-read btn-outline">Media &amp; Sims</a>
+
+                    </div>
+                </div>
+                <div class="module-card">
+                    <span class="tag"><span style="color: var(--accent-warm);"><strong>Linear Algebra &amp; Data</strong></span></span>
+                    <h3>Singular Value Decomposition (SVD)</h3>
+                    <p>A deep dive into the anatomy of matrices. Learn how complex transformations are factored into <span style="color: var(--accent-warm);"><strong>Rotate-Stretch-Rotate</strong></span> operations, forming the mathematical bedrock for noise reduction and 3D alignment.</p>
+
+                    <div class="button-group">
+                        <a href="svd.html" class="btn-read">Read Module</a>
+                        <a href="svd_media.html" class="btn-read btn-outline">Media &amp; Sims</a>
+                    </div>
+                </div>
+                <div class="module-card">
+                    <span class="tag"><span style="color: var(--accent-warm);"><strong>Data Structures &amp; Optimization</strong></span></span>
+                    <h3>KD-Trees &amp; Spatial Searching</h3>
+                    <p>Mathematics means nothing if the code cannot execute. Discover the <span style="color: var(--accent-warm);"><strong>Architecture of Speed</strong></span>—how splitting 3D space recursively drops computational complexity from a crushing $$O(n^2)$$ down to an efficient $$O(n \log n)$$</p>
+
+                    <div class="button-group">
+                        <a href="kd_tree.html" class="btn-read">Read Module</a>
+                        <a href="kd_media.html" class="btn-read btn-outline">Media &amp; Sims</a>
+                    </div>
+                </div>
+                <div class="module-card">
+                    <span class="tag"><span style="color: var(--accent-warm);"><strong>Statistics &amp; Machine Learning</strong></span></span>
+                    <h3>Mean Squared Error (MSE)</h3>
+                    <p>The mathematical judge of machine learning. Explore the objective function that drives gradient descent, and discover why <span style="color: var(--accent-warm);"><strong>squaring the error</strong></span> is the ultimate tool for hunting outliers and optimizing AI models.</p>
+
+                    <div class="button-group">
+                        <a href="mse.html" class="btn-read">Read Module</a>
+                        <a href="mse_media.html" class="btn-read btn-outline">Media &amp; Sims</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        CuriousChamp © 2026.  Maintained by <a href="Krishnanand.html">Krishnanand</a>. <br>Built for the advancement of open-source AI education.
+    </footer>
+
+</body>
+</html>
