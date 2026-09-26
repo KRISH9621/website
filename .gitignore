@@ -56,11 +56,3 @@ htmlcov/
 .sass-cache/
 *.css.map
 _site/
-
-# =========================
-# OS / Editor Files
-# =========================
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
