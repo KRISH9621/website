@@ -223,7 +223,7 @@
         <p><strong>Performance Note:</strong> Doing this via brute force requires checking every point against every other point, which results in a massive \(O(n^2)\) time complexity. For a production-grade backend engine, this step is almost always optimized using spatial data structures like  <a href="kd_tree.html"><strong>KD-Trees</strong> </a>, which brings the search time down to \(O(n \log n)\). This is often where developers drop down to C or C++ to handle the heavy memory lifting.</p>
 
         <h3>Step 2: The Objective Function</h3>
-        <p>Now that we have matched pairs \((p_i, q_i)\), we want to find the rigid transformation (rotation \(R\) and translation \(t\)) that minimizes the <a href="MSE.html"><strong>Mean Squared Error (MSE)</strong> </a> across all matched pairs:</p>
+        <p>Now that we have matched pairs \((p_i, q_i)\), we want to find the rigid transformation (rotation \(R\) and translation \(t\)) that minimizes the <a href="mse.html"><strong>Mean Squared Error (MSE)</strong> </a> across all matched pairs:</p>
         $$E(R, t) = \frac{1}{n} \sum_{i=1}^{n} ||q_i - (R p_i + t)||^2$$
         <p>To solve this equation efficiently without trial and error, we use a beautiful piece of linear algebra known as <a href="svd.html"><strong>Singular Value Decomposition </strong> </a> to solve the Orthogonal Procrustes problem.</p>
 
